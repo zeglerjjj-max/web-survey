@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c36">
+  <meta name="description" content="Survei penelitian tentang hambatan respons awal dan pelaporan penipuan transaksi digital.">
+  <title>Survei 12 Menit Pertama</title>
+  <style>
+    :root {
+      --ink: #172d29;
+      --muted: #62736e;
+      --paper: #f5f7f2;
+      --card: #ffffff;
+      --line: #e0e8e1;
+      --green: #176b57;
+      --green-dark: #123c36;
+      --mint: #e3f2e9;
+      --yellow: #f3c969;
+      --danger: #a33c35;
+      --shadow: 0 18px 50px rgba(23, 54, 45, .08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .topbar { height: 68px; padding: 0 clamp(20px, 5vw, 64px); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(23,54,45,.08); background: rgba(255,255,255,.72); }
+    .brand { display: flex; gap: 11px; align-items: center; font-weight: 850; letter-spacing: -.035em; }
+    .brand-mark { width: 36px; height: 36px; display: grid; place-items: center; color: #fff; background: var(--green-dark); border-radius: 12px; font-size: 15px; font-weight: 900; }
+    .top-label { color: var(--muted); font-size: .82rem; }
+    .layout { max-width: 1180px; margin: 0 auto; padding: 48px 24px 64px; display: grid; grid-template-columns: minmax(250px, .75fr) minmax(0, 1.25fr); gap: clamp(28px, 5vw, 66px); align-items: start; }
+    .intro { padding: 12px 0 0; position: sticky; top: 24px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--green); font-size: .77rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 21px; height: 2px; background: var(--yellow); display: inline-block; }
+    h1 { font-size: clamp(2.4rem, 4.5vw, 4rem); line-height: .99; letter-spacing: -.065em; margin: 18px 0 22px; max-width: 500px; }
+    h1 span { color: var(--green); }
+    .lead { color: #51655e; font-size: 1.04rem; max-width: 450px; }
+    .info-list { list-style: none; padding: 0; margin: 28px 0; display: grid; gap: 14px; }
+    .info-list li { display: flex; gap: 11px; align-items: flex-start; color: #435a52; font-size: .92rem; }
+    .check { background: var(--mint); color: var(--green); width: 25px; height: 25px; flex: 0 0 25px; border-radius: 8px; display: grid; place-items: center; font-weight: 900; font-size: .78rem; }
+    .privacy-note { background: #edf2ed; border: 1px solid #dfe8df; border-radius: 16px; padding: 16px 17px; color: #52655e; font-size: .82rem; }
+    .privacy-note strong { display: block; color: var(--ink); margin-bottom: 4px; }
+    .survey-card { background: var(--card); border: 1px solid rgba(23,54,45,.08); border-radius: 25px; box-shadow: var(--shadow); min-height: 540px; overflow: hidden; }
+    .card-head { padding: 25px 30px 18px; border-bottom: 1px solid #edf1ec; }
+    .head-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 15px; }
+    .pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 11px; font-size: .73rem; font-weight: 750; background: #edf5ee; color: var(--green); }
+    .step-count { font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .progress-track { height: 6px; background: #edf1ec; border-radius: 99px; overflow: hidden; }
+    .progress-bar { height: 100%; width: 0; background: var(--green); border-radius: inherit; transition: width .25s ease; }
+    .card-body { padding: 30px; }
+    .section-kicker { font-size: .73rem; color: var(--green); font-weight: 850; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 11px; }
+    h2 { font-size: clamp(1.35rem, 2.3vw, 1.8rem); letter-spacing: -.04em; line-height: 1.2; margin: 0 0 11px; }
+    .question-description { color: var(--muted); font-size: .9rem; margin: 0 0 24px; }
+    .options { display: grid; gap: 10px; }
+    .option { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 13px; cursor: pointer; transition: border-color .15s ease, background .15s ease, transform .15s ease; }
+    .option:hover { border-color: #9bb9a9; background: #fbfdfb; }
+    .option.selected { border-color: var(--green); background: #f0f8f2; box-shadow: inset 0 0 0 1px var(--green); }
+    .option input { margin-top: 4px; accent-color: var(--green); flex: 0 0 auto; width: 16px; height: 16px; }
+    .option-copy { font-size: .91rem; flex: 1; }
+    .option-hint { display: block; color: var(--muted); font-size: .78rem; margin-top: 3px; }
+    textarea, .text-input { display: block; width: 100%; border: 1px solid #d6e1d8; border-radius: 13px; padding: 14px 15px; background: #fcfdfb; color: var(--ink); outline: none; transition: border-color .15s ease, box-shadow .15s ease; }
+    textarea { min-height: 130px; resize: vertical; }
+    textarea:focus, .text-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(23,107,87,.12); }
+    .field-label { display: block; font-size: .85rem; font-weight: 750; margin: 18px 0 7px; }
+    .optional-label { color: var(--muted); font-size: .75rem; font-weight: 500; }
+    .hint { color: var(--muted); font-size: .78rem; margin-top: 8px; }
+    .error { color: var(--danger); font-size: .82rem; font-weight: 650; margin-top: 13px; }
+    .card-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 20px 30px 26px; border-top: 1px solid #edf1ec; }
+    .btn { border: 0; border-radius: 12px; padding: 12px 19px; font-weight: 800; font-size: .9rem; transition: transform .15s ease, background .15s ease; }
+    .btn:active { transform: scale(.98); }
+    .btn-primary { background: var(--green-dark); color: white; box-shadow: 0 5px 14px rgba(18,60,54,.12); }
+    .btn-primary:hover { background: var(--green); }
+    .btn-secondary { background: transparent; color: #51635b; }
+    .btn-secondary:hover { background: #f0f4ef; }
+    .btn[disabled] { opacity: .55; cursor: not-allowed; }
+    .foot-note { color: var(--muted); font-size: .75rem; max-width: 180px; }
+    .consent-box { padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: #fbfdfb; }
+    .consent-check { display: flex; align-items: flex-start; gap: 11px; font-size: .87rem; font-weight: 650; }
+    .consent-check input { margin-top: 5px; accent-color: var(--green); width: 17px; height: 17px; flex: 0 0 auto; }
+    .concept-box { background: #f0f7f1; border: 1px solid #dcebe0; border-radius: 14px; padding: 16px; color: #3e5950; font-size: .88rem; margin: 0 0 22px; }
+    .concept-box strong { display: block; color: var(--green-dark); margin-bottom: 6px; }
+    .result-state { padding: 46px 30px; text-align: center; }
+    .result-icon { width: 66px; height: 66px; margin: 0 auto 20px; border-radius: 22px; background: var(--mint); color: var(--green); display: grid; place-items: center; font-size: 1.75rem; font-weight: 900; }
+    .result-state h2 { margin-bottom: 12px; }
+    .result-state p { color: var(--muted); max-width: 440px; margin: 0 auto 23px; }
+    .result-actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .footer { text-align: center; color: #82918a; font-size: .75rem; padding: 0 24px 26px; }
+    .hidden { display: none !important; }
+    @media (max-width: 850px) {
+      .layout { grid-template-columns: 1fr; max-width: 690px; padding-top: 28px; gap: 28px; }
+      .intro { position: static; padding: 0; }
+      h1 { font-size: clamp(2.5rem, 9vw, 3.6rem); }
+      .lead { max-width: 600px; }
+      .info-list { grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 22px 0; }
+      .info-list li { font-size: .79rem; gap: 7px; }
+      .check { width: 22px; height: 22px; flex-basis: 22px; }
+      .privacy-note { display: none; }
+      .survey-card { min-height: auto; }
+    }
+    @media (max-width: 540px) {
+      .topbar { height: 60px; padding: 0 18px; }
+      .top-label { font-size: .72rem; }
+      .layout { padding: 25px 14px 36px; }
+      .info-list { grid-template-columns: 1fr; gap: 9px; margin: 20px 0 4px; }
+      .info-list li { font-size: .84rem; }
+      .survey-card { border-radius: 19px; }
+      .card-head { padding: 20px 19px 15px; }
+      .card-body { padding: 24px 19px; }
+      .card-foot { padding: 17px 19px 20px; }
+      .option { padding: 12px 12px; }
+      .foot-note { display: none; }
+      .btn { padding: 12px 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">R12</div><span>RESPON-12</span></div>
+    <div class="top-label">Survei penelitian · 5–8 menit</div>
+  </header>
+
+  <main class="layout">
+    <aside class="intro">
+      <div class="eyebrow">Survei tanpa meminta identitas</div>
+      <h1>12 Menit <span>Pertama.</span></h1>
+      <p class="lead">Membantu penelitian tentang apa yang membuat orang kesulitan mengambil tindakan dan menyiapkan laporan setelah mengalami penipuan transaksi digital.</p>
+      <ul class="info-list">
+        <li><span class="check">✓</span><span>Sekitar 5–8 menit untuk menyelesaikan survei.</span></li>
+        <li><span class="check">✓</span><span>Tidak meminta nama, nomor rekening, atau bukti transaksi asli.</span></li>
+        <li><span class="check">✓</span><span>Partisipasi sukarela; pertanyaan pengalaman sensitif dapat dilewati.</span></li>
+      </ul>
+      <div class="privacy-note"><strong>Privasi dan penggunaan data</strong>Jawaban digunakan untuk penelitian mengenai hambatan respons awal. Jangan tuliskan informasi pribadi atau detail transaksi yang dapat mengidentifikasi siapa pun. Jawaban baru dikirim saat tombol kirim ditekan dan setelah penyelenggara mengaktifkan penyimpanan survei.</div>
+    </aside>
+
+    <section class="survey-card" aria-live="polite" aria-labelledby="question-title">
+      <div id="survey-shell">
+        <div class="card-head">
+          <div class="head-row"><span class="pill" id="section-pill">PERSIAPAN</span><span class="step-count" id="step-count">Sebelum mulai</span></div>
+          <div class="progress-track" role="progressbar" aria-label="Kemajuan survei" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+        </div>
+        <div class="card-body" id="card-body">
+          <div class="section-kicker">Terima kasih telah membantu</div>
+          <h2 id="question-title">Sebelum memulai survei</h2>
+          <p class="question-description">Survei ini bertujuan memahami pengalaman dan kebutuhan pengguna, bukan mengumpulkan laporan kasus penipuan. Tidak ada jawaban benar atau salah untuk pertanyaan opini.</p>
+          <div class="concept-box"><strong>Hal yang perlu diketahui</strong>Survei ini ditujukan bagi pengguna atau orang yang ikut membantu transaksi digital berusia 16 tahun ke atas. Responden berusia 16–17 tahun hanya boleh ikut jika sudah mendapat izin orang tua/wali terlebih dahulu; ikuti juga ketentuan sekolah atau pembimbing jika berlaku. Keikutsertaan bersifat sukarela. Jangan memasukkan nama, nomor telepon, nomor rekening, KTP, PIN, OTP, kata sandi, atau informasi pribadi lainnya ke dalam jawaban terbuka.</div>
+          <div class="consent-box">
+            <label class="consent-check"><input type="checkbox" id="consent-check"><span>Saya telah membaca penjelasan di atas dan bersedia berpartisipasi secara sukarela. Jika saya berusia 16–17 tahun, saya sudah mendapat izin orang tua/wali terlebih dahulu dan akan mengikuti arahan sekolah/pembimbing jika diwajibkan.</span></label>
+          </div>
+          <div class="error hidden" id="consent-error" role="alert">Centang persetujuan untuk melanjutkan.</div>
+        </div>
+        <div class="card-foot" id="card-foot">
+          <span class="foot-note">Jawaban disimpan setelah dikirim.</span>
+          <button class="btn btn-primary" id="start-btn" type="button">Mulai survei <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="footer">RESPON-12 · Prototipe penelitian independen · Bukan layanan resmi IASC, OJK, bank, atau kepolisian.</div>
+
+<script>
+(() => {
+  'use strict';
+
+  // Tempel URL Web App Google Apps Script yang berakhiran /exec setelah backend dibuat.
+  const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxF2fTf2eBCWDScW1OHOyi1z7WDz6RENBKU0OhZlz9RvJhagyAdI4CH_0RGfPbacf6WUg/exec';
+
+  const questions = [
+    { id: 'q1', n: 1, section: 'PENYARINGAN', title: 'Pilih pernyataan usia dan izin yang sesuai.', description: 'Untuk responden berusia 16–17 tahun, izin orang tua/wali harus diperoleh sebelum mengisi survei. Jangan melanjutkan jika izin tersebut belum ada.', type: 'radio', required: true, options: [
+      { value: 'teen_with_permission', label: 'Saya berusia 16–17 tahun dan sudah mendapat izin orang tua/wali' }, { value: 'adult', label: 'Saya berusia 18 tahun atau lebih' }, { value: 'not_eligible', label: 'Saya berusia di bawah 16 tahun, atau berusia 16–17 tahun tetapi belum mendapat izin orang tua/wali' }
+    ]},
+    { id: 'q2', n: 2, section: 'PENYARINGAN', title: 'Dalam enam bulan terakhir, layanan apa yang pernah Anda gunakan atau bantu gunakan untuk mengirim atau membayar uang?', description: 'Pilih semua yang sesuai. Jika transaksi dilakukan melalui akun orang tua/wali, pilih juga opsi yang menjelaskan hal tersebut. Jangan memasukkan detail akun atau transaksi.', type: 'checkbox', required: true, exclusive: 'none', options: [
+      { value: 'bank', label: 'Transfer bank atau mobile banking' }, { value: 'ewallet', label: 'Dompet digital' }, { value: 'qris', label: 'Pembayaran melalui QRIS' }, { value: 'platform', label: 'Transfer melalui platform perdagangan atau layanan lain' }, { value: 'parent_account', label: 'Saya ikut melakukan atau membantu transaksi melalui akun orang tua/wali dengan izin dan pengawasan mereka' }, { value: 'none', label: 'Saya tidak pernah menggunakan atau membantu transaksi digital' }
+    ]},
+    { id: 'q3', n: 3, section: 'KEBIASAAN TRANSAKSI', title: 'Seberapa sering Anda melakukan transaksi digital?', type: 'radio', required: true, options: [
+      { value: 'daily', label: 'Setiap hari' }, { value: 'weekly', label: 'Beberapa kali seminggu' }, { value: 'monthly', label: 'Beberapa kali sebulan' }, { value: 'rare', label: 'Jarang' }
+    ]},
+    { id: 'q4', n: 4, section: 'PENGETAHUAN PELAPORAN', title: 'Sebelum mengisi survei ini, apakah Anda pernah mendengar Indonesia Anti-Scam Centre (IASC)?', type: 'radio', required: true, options: [
+      { value: 'know', label: 'Ya, saya mengetahui fungsi dan cara mengaksesnya' }, { value: 'heard', label: 'Pernah mendengar namanya saja' }, { value: 'no', label: 'Belum pernah mendengar' }
+    ]},
+    { id: 'q5', n: 5, section: 'PENGALAMAN', title: 'Dalam 12 bulan terakhir, apakah Anda pernah mengalami kejadian terkait penipuan transaksi digital?', description: 'Tidak perlu menyebut nama, nilai kerugian, atau detail transaksi.', type: 'radio', required: true, options: [
+      { value: 'loss', label: 'Ya, terjadi transaksi dan saya mengalami kerugian' }, { value: 'transaction_no_loss', label: 'Ada transaksi atau data sempat diberikan, tetapi saya tidak mengalami kerugian' }, { value: 'near_miss', label: 'Hampir tertipu, tetapi tidak melakukan transaksi atau memberikan data' }, { value: 'none', label: 'Tidak pernah mengalami hal tersebut' }, { value: 'prefer_not', label: 'Memilih tidak menjawab' }
+    ]},
+    { id: 'q6', n: 6, section: 'PENGETAHUAN PELAPORAN', exclusive: 'dont_know', title: 'Jika menduga baru saja menjadi korban penipuan, tindakan apa yang menurut Anda perlu dilakukan?', description: 'Pilih semua tindakan yang menurut Anda relevan.', type: 'checkbox', required: true, options: [
+      { value: 'contact_provider', label: 'Segera menghubungi bank atau penyedia jasa pembayaran melalui kanal resmi' }, { value: 'save_evidence', label: 'Menyimpan bukti transaksi dan percakapan' }, { value: 'iasc', label: 'Melapor melalui kanal resmi IASC' }, { value: 'police', label: 'Mencari panduan pelaporan kepada kepolisian' }, { value: 'ask_family', label: 'Meminta bantuan keluarga atau orang tepercaya' }, { value: 'dont_know', label: 'Belum tahu tindakan yang tepat' }, { value: 'other', label: 'Lainnya' }
+    ]},
+    { id: 'q7', n: 7, section: 'PENGETAHUAN PELAPORAN', exclusive: 'dont_know', title: 'Jika ingin melaporkan penipuan transaksi keuangan di Indonesia, ke mana Anda akan mencari bantuan?', description: 'Pilih semua yang sesuai dengan pengetahuan Anda saat ini.', type: 'checkbox', required: true, options: [
+      { value: 'bank', label: 'Bank atau penyedia jasa pembayaran' }, { value: 'iasc', label: 'Indonesia Anti-Scam Centre (IASC)' }, { value: 'police', label: 'Kepolisian' }, { value: 'family', label: 'Keluarga atau teman' }, { value: 'search', label: 'Pencarian internet atau media sosial' }, { value: 'dont_know', label: 'Tidak tahu harus ke mana' }, { value: 'other', label: 'Lainnya' }
+    ]},
+    { id: 'q8', n: 8, section: 'PENGETAHUAN PELAPORAN', title: 'Seberapa yakin Anda dapat menemukan prosedur pelaporan yang benar tanpa bantuan orang lain?', type: 'radio', required: true, options: [
+      { value: '1', label: '1 — Sangat tidak yakin' }, { value: '2', label: '2 — Tidak yakin' }, { value: '3', label: '3 — Cukup yakin' }, { value: '4', label: '4 — Yakin' }, { value: '5', label: '5 — Sangat yakin' }
+    ]},
+    { id: 'q9', n: 9, section: 'PENGALAMAN KORBAN', title: 'Setelah kejadian atau aktivitas mencurigakan terjadi, berapa lama hingga Anda menyadari atau menduga ada penipuan?', description: 'Jika tidak ingat, pilih “Tidak ingat”. Jawaban boleh dilewati.', type: 'radio', required: false, options: [
+      { value: 'under15', label: 'Kurang dari 15 menit' }, { value: '15to60', label: '15–60 menit' }, { value: '1to6', label: '1–6 jam' }, { value: '6to12', label: '6–12 jam' }, { value: 'over12', label: 'Lebih dari 12 jam' }, { value: 'unknown', label: 'Tidak ingat' }
+    ]},
+    { id: 'q10', n: 10, section: 'PENGALAMAN KORBAN', title: 'Setelah menyadarinya, berapa lama hingga Anda pertama kali menghubungi bank atau penyedia jasa pembayaran?', description: 'Pilih “Tidak pernah menghubungi” jika tidak menghubungi. Jawaban boleh dilewati.', type: 'radio', required: false, options: [
+      { value: 'under15', label: 'Kurang dari 15 menit' }, { value: '15to60', label: '15–60 menit' }, { value: '1to6', label: '1–6 jam' }, { value: '6to12', label: '6–12 jam' }, { value: 'over12', label: 'Lebih dari 12 jam' }, { value: 'never', label: 'Tidak pernah menghubungi' }, { value: 'unknown', label: 'Tidak ingat' }, { value: 'not_applicable', label: 'Tidak relevan dengan kejadian saya' }
+    ]},
+    { id: 'q11', n: 11, section: 'PENGALAMAN KORBAN', title: 'Berapa lama hingga Anda mengirimkan laporan melalui kanal pelaporan resmi, jika melakukannya?', description: 'Yang dimaksud adalah laporan resmi, bukan sekadar bertanya kepada keluarga atau teman.', type: 'radio', required: false, options: [
+      { value: 'under15', label: 'Kurang dari 15 menit' }, { value: '15to60', label: '15–60 menit' }, { value: '1to6', label: '1–6 jam' }, { value: '6to12', label: '6–12 jam' }, { value: 'over12', label: 'Lebih dari 12 jam' }, { value: 'not_reported', label: 'Belum melapor' }, { value: 'unknown', label: 'Tidak ingat' }
+    ]},
+    { id: 'q12', n: 12, section: 'PENGALAMAN KORBAN', exclusive: 'no_delay', title: 'Apa saja yang membuat Anda terlambat mengambil tindakan atau melapor?', description: 'Pilih semua yang sesuai. Jawaban boleh dilewati.', type: 'checkbox', required: false, options: [
+      { value: 'late_awareness', label: 'Tidak segera menyadari bahwa transaksi merupakan penipuan' }, { value: 'dont_know_contact', label: 'Tidak tahu harus menghubungi siapa' }, { value: 'unclear_steps', label: 'Bingung mengenai urutan tindakan' }, { value: 'evidence', label: 'Kesulitan mencari bukti transaksi atau percakapan' }, { value: 'form', label: 'Kesulitan memahami formulir pelaporan' }, { value: 'fear', label: 'Takut atau malu untuk bercerita' }, { value: 'hopeless', label: 'Mengira uang sudah tidak mungkin diselamatkan' }, { value: 'access', label: 'Kendala akses internet atau perangkat' }, { value: 'no_delay', label: 'Tidak mengalami keterlambatan' }, { value: 'other', label: 'Lainnya' }
+    ]},
+    { id: 'q13', n: 13, section: 'PENGALAMAN KORBAN', title: 'Bagian mana yang paling sulit ketika Anda mencoba menangani kejadian tersebut?', description: 'Pilih satu jawaban yang paling sesuai. Jawaban boleh dilewati.', type: 'radio', required: false, options: [
+      { value: 'first_step', label: 'Mengetahui tindakan pertama' }, { value: 'contact_bank', label: 'Menghubungi bank atau penyedia jasa pembayaran' }, { value: 'collect_evidence', label: 'Mengumpulkan bukti' }, { value: 'timeline', label: 'Menyusun kronologi' }, { value: 'report_form', label: 'Mengisi laporan' }, { value: 'followup', label: 'Memahami tindak lanjut' }, { value: 'none', label: 'Tidak ada bagian yang sulit' }, { value: 'other', label: 'Lainnya' }
+    ]},
+    { id: 'q14', n: 14, section: 'PENGALAMAN KORBAN', title: 'Apakah bukti transaksi dan percakapan yang diperlukan tersedia ketika Anda mulai menangani kejadian?', type: 'radio', required: false, options: [
+      { value: 'complete', label: 'Ya, lengkap' }, { value: 'partial', label: 'Hanya sebagian' }, { value: 'none', label: 'Tidak tersedia' }, { value: 'unknown', label: 'Tidak ingat atau tidak yakin' }
+    ]},
+    { id: 'q15', n: 15, section: 'PENGALAMAN KORBAN', title: 'Apa yang paling membantu Anda ketika menghadapi kejadian tersebut?', description: 'Jawaban opsional. Jangan tuliskan nama, nomor rekening, nomor telepon, atau informasi pribadi.', type: 'textarea', required: false, placeholder: 'Contoh: bantuan keluarga, petunjuk bank, atau informasi dari situs resmi…' },
+    { id: 'q16', n: 16, section: 'PENILAIAN KONSEP', title: 'Bagian mana dari alat bantu seperti ini yang menurut Anda paling bermanfaat?', type: 'radio', required: true, options: [
+      { value: 'emergency', label: 'Panduan tindakan awal' }, { value: 'official_links', label: 'Tautan ke kanal resmi' }, { value: 'extract', label: 'Membaca informasi dari bukti transaksi' }, { value: 'timeline', label: 'Menyusun draf kronologi' }, { value: 'checklist', label: 'Memeriksa kelengkapan laporan' }, { value: 'none', label: 'Saya tidak membutuhkan alat tambahan' }, { value: 'other', label: 'Lainnya' }
+    ]},
+    { id: 'q17', n: 17, section: 'PENILAIAN KONSEP', title: 'Apa kekhawatiran terbesar Anda jika menggunakan alat tersebut?', type: 'radio', required: true, options: [
+      { value: 'privacy', label: 'Privasi data' }, { value: 'ocr_error', label: 'Kesalahan membaca nomor rekening atau nominal' }, { value: 'ai_error', label: 'Informasi yang diberikan AI keliru' }, { value: 'trust', label: 'Tidak percaya pada situs' }, { value: 'slow', label: 'Proses terlalu panjang' }, { value: 'none', label: 'Tidak memiliki kekhawatiran tersebut' }, { value: 'other', label: 'Lainnya' }
+    ]},
+    { id: 'q18', n: 18, section: 'PENILAIAN KONSEP', title: 'Bagaimana Anda paling nyaman jika bukti transaksi perlu diproses?', type: 'radio', required: true, options: [
+      { value: 'local', label: 'Diproses langsung di perangkat, jika memungkinkan' }, { value: 'external_protected', label: 'Diproses layanan eksternal dengan penjelasan dan perlindungan yang jelas' }, { value: 'no_upload', label: 'Tidak ingin mengunggah bukti sama sekali' }, { value: 'unsure', label: 'Belum tahu' }
+    ]},
+    { id: 'q19', n: 19, section: 'PENILAIAN KONSEP', title: 'Dalam uji coba dengan data simulasi, berapa lama menurut Anda proses menyiapkan draf laporan yang sudah diperiksa dapat diterima?', description: 'Ini menanyakan preferensi waktu, bukan waktu yang pasti dapat dicapai.', type: 'radio', required: true, options: [
+      { value: 'under5', label: 'Kurang dari 5 menit' }, { value: '5to12', label: '5–12 menit' }, { value: '13to20', label: '13–20 menit' }, { value: 'over20', label: 'Lebih dari 20 menit' }, { value: 'unsure', label: 'Tidak tahu' }
+    ]},
+    { id: 'q20', n: 20, section: 'PENILAIAN KONSEP', title: 'Apa alasan utama yang mungkin membuat Anda tidak menggunakan alat tersebut?', type: 'radio', required: true, options: [
+      { value: 'direct_official', label: 'Saya lebih memilih langsung menghubungi bank atau IASC' }, { value: 'no_ai', label: 'Tidak percaya pada AI' }, { value: 'privacy', label: 'Tidak yakin terhadap keamanan data' }, { value: 'manual_enough', label: 'Menurut saya langkah manual sudah cukup' }, { value: 'none', label: 'Tidak ada alasan tersebut' }, { value: 'other', label: 'Lainnya' }
+    ]}
+  ];
+
+  const answers = {};
+  let activeQuestions = [];
+  let currentIndex = 0;
+  let lastFocus = null;
+  const body = document.getElementById('card-body');
+  const foot = document.getElementById('card-foot');
+  const pill = document.getElementById('section-pill');
+  const count = document.getElementById('step-count');
+  const progressBar = document.getElementById('progress-bar');
+  const progressTrack = document.getElementById('progress-track');
+  const shell = document.getElementById('survey-shell');
+
+  const getQuestion = id => questions.find(q => q.id === id);
+  const labelFor = (q, value) => {
+    const opt = q.options?.find(o => o.value === value);
+    return opt ? opt.label : value;
+  };
+
+  function updateActiveQuestions() {
+    const experience = answers.q5;
+    const shouldShowExperience = experience === 'loss' || experience === 'transaction_no_loss';
+    activeQuestions = questions.filter(q => !(q.n >= 9 && q.n <= 15) || shouldShowExperience);
+  }
+
+  function selectedValues(question) {
+    const a = answers[question.id];
+    if (question.type === 'checkbox') return Array.isArray(a) ? a : [];
+    return a == null ? '' : a;
+  }
+
+  function renderQuestion() {
+    updateActiveQuestions();
+    if (currentIndex >= activeQuestions.length) currentIndex = activeQuestions.length - 1;
+    if (currentIndex < 0) currentIndex = 0;
+    const q = activeQuestions[currentIndex];
+    if (!q) return;
+
+    pill.textContent = q.section;
+    count.textContent = `Pertanyaan ${q.n} dari 20`;
+    const pct = Math.round((currentIndex / activeQuestions.length) * 100);
+    progressBar.style.width = `${pct}%`;
+    progressTrack.setAttribute('aria-valuenow', String(pct));
+
+    body.innerHTML = '';
+    const kicker = document.createElement('div');
+    kicker.className = 'section-kicker';
+    kicker.textContent = `PERTANYAAN ${q.n.toString().padStart(2, '0')}`;
+    const h2 = document.createElement('h2');
+    h2.id = 'question-title';
+    h2.textContent = q.title;
+    body.append(kicker, h2);
+
+    if (q.description) {
+      const p = document.createElement('p');
+      p.className = 'question-description';
+      p.textContent = q.description;
+      body.appendChild(p);
+    } else {
+      const spacer = document.createElement('div');
+      spacer.style.height = '19px';
+      body.appendChild(spacer);
+    }
+
+    if (q.n === 16) {
+      const box = document.createElement('div');
+      box.className = 'concept-box';
+      const strong = document.createElement('strong');
+      strong.textContent = 'Konsep yang sedang dinilai';
+      const span = document.createElement('span');
+      span.textContent = 'Situs gratis yang memberi panduan tindakan awal, membantu membaca informasi dari bukti transaksi, menyusun draf kronologi, dan memeriksa kelengkapan sebelum pengguna menuju kanal resmi. Semua hasil AI harus diperiksa pengguna. Situs ini tidak menjamin pemulihan uang dan tidak menggantikan bank, IASC, atau kepolisian.';
+      box.append(strong, span);
+      body.appendChild(box);
+    }
+
+    if (q.type === 'textarea') {
+      const label = document.createElement('label');
+      label.className = 'field-label';
+      label.htmlFor = `${q.id}-input`;
+      label.textContent = 'Jawaban Anda ';
+      const optional = document.createElement('span');
+      optional.className = 'optional-label';
+      optional.textContent = '(opsional)';
+      label.appendChild(optional);
+      const ta = document.createElement('textarea');
+      ta.id = `${q.id}-input`;
+      ta.maxLength = 1200;
+      ta.placeholder = q.placeholder || 'Tuliskan jawaban Anda…';
+      ta.value = answers[q.id] || '';
+      ta.addEventListener('input', () => { answers[q.id] = ta.value; clearError(); });
+      body.append(label, ta);
+      const hint = document.createElement('div');
+      hint.className = 'hint';
+      hint.textContent = 'Maksimum 1.200 karakter. Hindari informasi yang dapat mengidentifikasi seseorang.';
+      body.appendChild(hint);
+    } else {
+      const opts = document.createElement('div');
+      opts.className = 'options';
+      const existing = selectedValues(q);
+      q.options.forEach((opt, idx) => {
+        const lab = document.createElement('label');
+        lab.className = 'option';
+        const inp = document.createElement('input');
+        inp.type = q.type === 'checkbox' ? 'checkbox' : 'radio';
+        inp.name = q.id;
+        inp.value = opt.value;
+        inp.checked = q.type === 'checkbox' ? existing.includes(opt.value) : existing === opt.value;
+        if (inp.checked) lab.classList.add('selected');
+        const copy = document.createElement('span');
+        copy.className = 'option-copy';
+        copy.textContent = opt.label;
+        lab.append(inp, copy);
+        inp.addEventListener('change', () => {
+          if (q.type === 'checkbox') {
+            let next = Array.isArray(answers[q.id]) ? [...answers[q.id]] : [];
+            if (opt.value === q.exclusive && inp.checked) {
+              next = [opt.value];
+            } else {
+              next = next.filter(v => v !== opt.value && v !== q.exclusive);
+              if (inp.checked) next.push(opt.value);
+            }
+            answers[q.id] = next;
+            // Update checkbox visuals and preserve exclusive options.
+            opts.querySelectorAll('input').forEach(other => {
+              const isChecked = next.includes(other.value);
+              other.checked = isChecked;
+              other.closest('.option').classList.toggle('selected', isChecked);
+            });
+          } else {
+            answers[q.id] = opt.value;
+            opts.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+            lab.classList.add('selected');
+          }
+          clearError();
+          // When a screener changes, remove answers that no longer apply.
+          if (q.id === 'q5') {
+            const show = opt.value === 'loss' || opt.value === 'transaction_no_loss';
+            if (!show) for (let n = 9; n <= 15; n++) delete answers[`q${n}`];
+          }
+        });
+        opts.appendChild(lab);
+      });
+      body.appendChild(opts);
+    }
+
+    const err = document.createElement('div');
+    err.className = 'error hidden';
+    err.id = 'question-error';
+    err.setAttribute('role', 'alert');
+    err.textContent = q.required ? 'Pilih atau isi jawaban sebelum melanjutkan.' : 'Periksa kembali jawaban Anda.';
+    body.appendChild(err);
+
+    foot.innerHTML = '';
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'btn btn-secondary';
+    back.textContent = '← Kembali';
+    back.disabled = currentIndex === 0;
+    back.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderQuestion(); } });
+    const note = document.createElement('span');
+    note.className = 'foot-note';
+    note.textContent = q.required ? 'Pertanyaan wajib dijawab' : 'Boleh dilewati';
+    const next = document.createElement('button');
+    next.type = 'button';
+    next.className = 'btn btn-primary';
+    const isLast = currentIndex === activeQuestions.length - 1;
+    next.textContent = isLast ? 'Kirim jawaban →' : 'Lanjut →';
+    next.addEventListener('click', () => advance(q));
+    foot.append(back, note, next);
+    document.querySelector('.survey-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function clearError() {
+    const err = document.getElementById('question-error');
+    if (err) err.classList.add('hidden');
+  }
+
+  function advance(q) {
+    const value = answers[q.id];
+    const valid = q.type === 'checkbox' ? Array.isArray(value) && value.length > 0 : q.type === 'textarea' ? true : Boolean(value);
+    if (q.required && !valid) {
+      const err = document.getElementById('question-error');
+      if (err) { err.textContent = q.type === 'checkbox' ? 'Pilih minimal satu jawaban untuk melanjutkan.' : 'Pilih jawaban sebelum melanjutkan.'; err.classList.remove('hidden'); }
+      return;
+    }
+
+    if (q.id === 'q1' && value === 'not_eligible') { showScreenout('Terima kasih atas minat Anda', 'Untuk survei ini, peserta berusia 16–17 tahun perlu mendapat izin orang tua/wali terlebih dahulu. Jika belum mendapat izin, jangan lanjutkan. Tidak ada jawaban survei yang dikirim.'); return; }
+    if (q.id === 'q2' && (!Array.isArray(value) || value.length === 0 || value.includes('none'))) { showScreenout('Terima kasih sudah memeriksa', 'Survei ini difokuskan pada orang yang menggunakan transaksi digital dalam enam bulan terakhir. Tidak ada jawaban yang dikirim.'); return; }
+
+    updateActiveQuestions();
+    if (q.id === 'q5') updateActiveQuestions();
+    if (currentIndex < activeQuestions.length - 1) {
+      currentIndex++;
+      renderQuestion();
+    } else {
+      submitSurvey();
+    }
+  }
+
+  function showScreenout(title, message) {
+    pill.textContent = 'SELESAI';
+    count.textContent = 'Penyaringan responden';
+    progressBar.style.width = '100%';
+    progressTrack.setAttribute('aria-valuenow', '100');
+    body.innerHTML = `<div class="result-state"><div class="result-icon">✓</div><h2 id="question-title"></h2><p id="result-message"></p><div class="result-actions"><button class="btn btn-secondary" id="close-btn" type="button">Selesai</button></div></div>`;
+    body.querySelector('#question-title').textContent = title;
+    body.querySelector('#result-message').textContent = message;
+    foot.innerHTML = '';
+    body.querySelector('#close-btn').addEventListener('click', () => { body.innerHTML = '<div class="result-state"><h2 id="question-title">Anda dapat menutup halaman ini.</h2><p>Terima kasih telah meluangkan waktu.</p></div>'; });
+  }
+
+  function showResult(kind, title, message, detail = '') {
+    pill.textContent = kind === 'success' ? 'SELESAI' : 'STATUS';
+    count.textContent = kind === 'success' ? 'Terima kasih' : 'Perlu perhatian';
+    progressBar.style.width = kind === 'success' ? '100%' : `${Math.round((currentIndex / activeQuestions.length) * 100)}%`;
+    progressTrack.setAttribute('aria-valuenow', kind === 'success' ? '100' : String(Math.round((currentIndex / activeQuestions.length) * 100)));
+    const icon = kind === 'success' ? '✓' : '!';
+    body.innerHTML = `<div class="result-state"><div class="result-icon">${icon}</div><h2 id="question-title"></h2><p id="result-message"></p><p id="result-detail" class="${detail ? '' : 'hidden'}"></p><div class="result-actions" id="result-actions"></div></div>`;
+    body.querySelector('#question-title').textContent = title;
+    body.querySelector('#result-message').textContent = message;
+    body.querySelector('#result-detail').textContent = detail;
+    foot.innerHTML = '';
+    if (kind !== 'success') {
+      const retry = document.createElement('button');
+      retry.type = 'button'; retry.className = 'btn btn-primary'; retry.textContent = 'Kembali ke survei';
+      retry.addEventListener('click', () => renderQuestion());
+      body.querySelector('#result-actions').appendChild(retry);
+    }
+  }
+
+  function normalizedAnswer(q) {
+    const v = answers[q.id];
+    if (v == null || v === '') return '';
+    if (q.type === 'checkbox') return v.map(value => labelFor(q, value));
+    if (q.type === 'radio') return labelFor(q, v);
+    return String(v).trim();
+  }
+
+  async function submitSurvey() {
+    const submitBtn = [...foot.querySelectorAll('button')].find(b => b.textContent.includes('Kirim jawaban'));
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Mengirim…'; }
+    if (!GOOGLE_APPS_SCRIPT_URL.startsWith('https://script.google.com/macros/s/') || GOOGLE_APPS_SCRIPT_URL.includes('PASTE_WEB_APP_URL_HERE')) {
+      showResult('warning', 'Survei belum diaktifkan', 'Tampilan survei siap digunakan, tetapi penyimpanan jawaban belum dikonfigurasi oleh penyelenggara.', 'Jangan membagikan tautan ini untuk pengumpulan data sebelum URL Google Apps Script dipasang. Ikuti README di paket proyek untuk mengaktifkan Google Sheets.');
+      return;
+    }
+
+    const payload = {
+      responseId: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      consent: true,
+      answers: {}
+    };
+    questions.forEach(q => { payload.answers[q.id] = normalizedAnswer(q); });
+    // no-cors avoids browser preflight for the Apps Script endpoint. The browser cannot read the response,
+    // so the UI honestly asks the researcher to verify receipt in the Sheet.
+    try {
+      await fetch(GOOGLE_APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      showResult('success', 'Permintaan pengiriman selesai', 'Terima kasih telah membantu penelitian ini.', 'Karena pembatasan keamanan peramban, halaman ini tidak dapat memastikan apakah Google Sheets menerima data. Penyelenggara perlu memeriksa spreadsheet untuk memastikan respons tercatat.');
+    } catch (err) {
+      showResult('warning', 'Pengiriman belum berhasil', 'Koneksi ke penyimpanan jawaban bermasalah. Jawaban belum dapat dikonfirmasi tersimpan.', 'Silakan hubungi penyelenggara survei untuk mendapatkan petunjuk selanjutnya. Hindari mengirim ulang berkali-kali sebelum status data diperiksa.');
+    }
+  }
+
+  document.getElementById('start-btn').addEventListener('click', () => {
+    const consent = document.getElementById('consent-check');
+    const error = document.getElementById('consent-error');
+    if (!consent.checked) { error.classList.remove('hidden'); return; }
+    answers._consent = 'setuju';
+    currentIndex = 0;
+    renderQuestion();
+  });
+  document.getElementById('consent-check').addEventListener('change', () => document.getElementById('consent-error').classList.add('hidden'));
+})();
+</script>
+</body>
+</html>
